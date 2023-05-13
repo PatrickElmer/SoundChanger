@@ -15,6 +15,10 @@ function handleFormSubmit(event) {
 
     const result = apply(changes, strings, categories, zeroCharacters)
     displayResult(result)
+
+    if (document.querySelector('#switch').checked) {
+        navigator.clipboard.writeText(result.join('\n'))
+    }
 }
 
 function apply(changes, strings, categories = {}, zeroCharacters = '∅-') {
@@ -44,6 +48,7 @@ function apply(changes, strings, categories = {}, zeroCharacters = '∅-') {
 function displayResult(result) {
     const resultElement = document.getElementById('result')
     resultElement.innerText = result.join('\n')
+
 }
 
 const regexEscape = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
