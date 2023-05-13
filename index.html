@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="logo.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>SoundChanger</title>
+</head>
+<body class="container">
+    <header>
+        <hgroup>
+            <h1>Soundchanger</h1>
+            <p>Apply sound changes to a list of words based on the notation used in historical linguistics.</p>
+        </hgroup>
+    </header>
+
+    <form id="soundChangeForm">
+      <div class="grid">
+        <div>
+            <label for="strings">Words:</label>
+            <textarea id="strings" name="strings" placeholder="pa&#10;ihu" required>pa&#10;ihu</textarea>
+            <small>Each word should be on a new line.</small>
+        </div>
+        <div>
+            <label for="changes">Sound Changes:</label>
+            <textarea id="changes" name="changes" placeholder="p>h/#_&#10;h>∅/V_V" required>p>h/#_&#10;h>∅/V_V</textarea>
+            <small>A valid sound change must include the character ">". The phonetic environment (optional) is written after "/" and must include an underscore "_". Otherwise it will be ignored.</small>
+        </div>
+      </div>
+      <button type="submit" style="max-width: 15rem;">Apply Sound Changes</button>
+    </form>
+    <hgroup>
+        <p>Results:</p>
+        <article id="result"></article>
+    </hgroup>
+    <footer>
+        <hr>
+        <div class="grid">
+            <hgroup>
+                <div><i data-feather="github"></i> <a href="https://github.com/patrickelmer/soundchanger" target="_blank" class="primary">GitHub</a></div>
+                <!-- <div><i data-feather="info"></i> <a href="https://soundchanger.readthedocs.io" target="_blank" class="primary">Documentation</a></div> -->
+                <div><i data-feather="code"></i> <a href="https://git.beelm.eu/patrick/soundchanger" target="_blank" class="primary">Python implementation</a></div>
+            </hgroup>
+            <hgroup>
+                <div> Made by <a href="https://pelmer.eu" target="_blank" class="primary">Patrick Elmer</a></div>
+            </hgroup>
+        </div>
+    </footer>
+    <script src="soundchanger.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>feather.replace()</script>
+</body>
+</html>
