@@ -33,13 +33,10 @@ function apply(changes, strings, categories = {}, zeroCharacters = '∅-') {
             console.log(`Failed to apply change "${change}".`)
             continue
         }
-
-        const pattern = `(${before})(${original})(${after})`
-        const lastGroupIndex = pattern.split('(').length - after.split(')').length
-        const replacement = `$1${changeTo}$${lastGroupIndex}`
+        const pattern = `(?<=${before})(${original})(?=${after})`
 
         strings = strings.map(string => {
-            return `#${string}#`.replace(new RegExp(pattern, 'g'), replacement).replace(/#/g, '').trim()
+            return `#${string}#`.replace(new RegExp(pattern, 'g'), changeTo).replace(/#/g, '').trim()
         })
     }
     return strings
