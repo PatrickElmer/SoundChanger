@@ -11,7 +11,7 @@ function handleFormSubmit(event) {
     const categories = {
         "V": ["i", "y", "ɨ", "ʉ", "ɯ", "u", "ɪ", "ʏ", "ʊ", "e", "ø", "ɘ", "ɵ", "ɤ", "o", "ə", "ɛ", "œ", "ɜ", "ɞ", "ʌ", "ɔ", "æ", "ɐ", "a", "ɶ", "ä", "ɑ", "ɒ"]
     }
-    const zeroCharacters = '∅-'
+    const zeroCharacters = ["∅", "-"]
 
     const result = apply(changes, strings, categories, zeroCharacters)
     displayResult(result)
@@ -21,10 +21,7 @@ function handleFormSubmit(event) {
     }
 }
 
-export function apply(changes, strings, categories={}, zeroCharacters='∅-') {
-    changes = Array.isArray(changes) ? changes : [changes]
-    strings = Array.isArray(strings) ? [...strings] : [strings]
-
+export function apply(changes, strings, categories={}, zeroCharacters=["∅", "-"]) {
     for (const change of changes) {
         let reformattedChange = reformatChangeToRegex(change, categories, zeroCharacters)
         const [original, changeTo, before, after] = splitChange(reformattedChange)
@@ -47,8 +44,7 @@ function displayResult(result) {
     resultElement.innerText = result.join('\n')
 }
 
-export function reformatChangeToRegex(change, categories = {}, zeroCharacters = '∅-') {
-    const regexEscape = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+export function reformatChangeToRegex(change, categories = {}, zeroCharacters = ["∅", "-"]) {
     const replacements = { ' ': '', '{': '(', '}': ')', ',': '|' }
 
     for (const [key, value] of Object.entries(replacements)) {
@@ -61,9 +57,7 @@ export function reformatChangeToRegex(change, categories = {}, zeroCharacters = 
         change = change.replace(new RegExp(`((?<=,)${regexEscape(category)})|(${regexEscape(category)}(?=,))`, 'g'), categoryValues.join('|'))
     }
 
-    for (const char of zeroCharacters) {
-        change = change.replace(new RegExp(regexEscape(char), 'g'), '')
-    }
+    change = change.replace(new RegExp(`(${zeroCharacters.join('|')})`, 'g'), '')
 
     return change
 }
