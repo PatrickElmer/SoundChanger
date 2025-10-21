@@ -23,7 +23,7 @@ describe('apply', () => {
     it('Simple change to zero', () => {
         const strings = ["a", "ba", "aba"]
         const result = ["", "b", "b"]
-        const changes = ["a>∅", "a>-", "a>"]
+        const changes = ["a>∅", "a>-", "a>", "a> "]
 
         for (const change of changes) {
             expect(apply(
