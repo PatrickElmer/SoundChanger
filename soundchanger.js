@@ -30,11 +30,13 @@ export function apply(changes, strings, categories={}, zeroCharacters=["∅", "-
             console.log(`Failed to apply change "${change}".`)
             continue
         }
-        const pattern = `(?<=${before})(${original})(?=${after})`
+        let pattern = before == "#" ? "^" : `(?<=${before})`
+        pattern += `(${original})`
+        pattern += after == "#" ? "$" : `(?=${after})`
 
-        strings = strings.map(string => {
-            return `#${string}#`.replace(new RegExp(pattern, 'g'), changeTo).replace(/#/g, '').trim()
-        })
+        strings = strings.map(
+            string => string.replace(new RegExp(pattern, 'g'), changeTo)
+        )
     }
     return strings
 }
