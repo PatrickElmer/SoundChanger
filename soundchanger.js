@@ -1,4 +1,4 @@
-document.getElementById('soundChangeForm').addEventListener('submit', handleFormSubmit)
+if (globalThis.document) document.getElementById('soundChangeForm').addEventListener('submit', handleFormSubmit)
 
 function handleFormSubmit(event) {
     event.preventDefault()
@@ -21,7 +21,7 @@ function handleFormSubmit(event) {
     }
 }
 
-function apply(changes, strings, categories = {}, zeroCharacters = '∅-') {
+export function apply(changes, strings, categories={}, zeroCharacters='∅-') {
     changes = Array.isArray(changes) ? changes : [changes]
     strings = Array.isArray(strings) ? [...strings] : [strings]
 
@@ -45,12 +45,10 @@ function apply(changes, strings, categories = {}, zeroCharacters = '∅-') {
 function displayResult(result) {
     const resultElement = document.getElementById('result')
     resultElement.innerText = result.join('\n')
-
 }
 
-const regexEscape = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-
-function reformatChangeToRegex(change, categories = {}, zeroCharacters = '∅-') {
+export function reformatChangeToRegex(change, categories = {}, zeroCharacters = '∅-') {
+    const regexEscape = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     const replacements = { ' ': '', '{': '(', '}': ')', ',': '|' }
 
     for (const [key, value] of Object.entries(replacements)) {
@@ -70,7 +68,7 @@ function reformatChangeToRegex(change, categories = {}, zeroCharacters = '∅-')
     return change
 }
 
-function splitChange(change) {
+export function splitChange(change) {
     if (!change.includes('/')) {
         change += '/'
     }
