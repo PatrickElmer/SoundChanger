@@ -23,7 +23,7 @@ describe('apply', () => {
     it('Simple change to zero', () => {
         const strings = ["a", "ba", "aba"]
         const result = ["", "b", "b"]
-        const changes = ["a>∅", "a>-", "a>"]
+        const changes = ["a>∅", "a>-", "a>", "a> "]
 
         for (const change of changes) {
             expect(apply(
@@ -37,5 +37,20 @@ describe('apply', () => {
             ["a", "ab", "abc"],
             {"A": ["a", "b"]},
         )).toEqual(["b", "bb", "bbc"])
+    })
+    it('Change with curly braces', () => {
+        expect(apply(
+            ["{a,b}>c"],
+            ["abc", "bcd"],
+        )).toEqual(["ccc", "ccd"])
+        expect(apply(
+            ["a>b/{c, d}_"],
+            ["aa", "ca", "da"],
+        )).toEqual(["aa", "cb", "db"])
+        expect(apply(
+            ["d>e/{A}_"],
+            ["ad", "bd", "cd"],
+            {"A": ["a", "B"], "B": ["b", "c"]},
+        )).toEqual(["ae", "be", "ce"])
     })
 })
