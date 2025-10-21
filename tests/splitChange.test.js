@@ -1,7 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import {
-    splitChange
-} from '../soundchanger.js'
+import { splitChange } from '../soundchanger.js'
 
 describe('splitChange', () => {
     it('Split all four parameters', () => {

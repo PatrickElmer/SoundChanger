@@ -21,7 +21,7 @@ function handleFormSubmit(event) {
     }
 }
 
-export function apply(changes, strings, categories = {}, zeroCharacters = '∅-') {
+export function apply(changes, strings, categories={}, zeroCharacters='∅-') {
     changes = Array.isArray(changes) ? changes : [changes]
     strings = Array.isArray(strings) ? [...strings] : [strings]
 
@@ -42,15 +42,13 @@ export function apply(changes, strings, categories = {}, zeroCharacters = '∅-'
     return strings
 }
 
-export function displayResult(result) {
+function displayResult(result) {
     const resultElement = document.getElementById('result')
     resultElement.innerText = result.join('\n')
-
 }
 
-const regexEscape = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-
 export function reformatChangeToRegex(change, categories = {}, zeroCharacters = '∅-') {
+    const regexEscape = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     const replacements = { ' ': '', '{': '(', '}': ')', ',': '|' }
 
     for (const [key, value] of Object.entries(replacements)) {
