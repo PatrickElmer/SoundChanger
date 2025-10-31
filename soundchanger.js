@@ -11,7 +11,7 @@ function handleFormSubmit(event) {
     const categories = {
         "V": ["i", "y", "ɨ", "ʉ", "ɯ", "u", "ɪ", "ʏ", "ʊ", "e", "ø", "ɘ", "ɵ", "ɤ", "o", "ə", "ɛ", "œ", "ɜ", "ɞ", "ʌ", "ɔ", "æ", "ɐ", "a", "ɶ", "ä", "ɑ", "ɒ"]
     }
-    const zeroCharacters = '∅-'
+    const zeroCharacters = ["∅", "-"]
 
     const result = apply(changes, strings, categories, zeroCharacters)
     displayResult(result)
@@ -21,10 +21,7 @@ function handleFormSubmit(event) {
     }
 }
 
-export function apply(changes, strings, categories={}, zeroCharacters='∅-') {
-    changes = Array.isArray(changes) ? changes : [changes]
-    strings = Array.isArray(strings) ? [...strings] : [strings]
-
+export function apply(changes, strings, categories={}, zeroCharacters=["∅", "-"]) {
     for (const change of changes) {
         let reformattedChange = reformatChangeToRegex(change, categories, zeroCharacters)
         const [original, changeTo, before, after] = splitChange(reformattedChange)
@@ -33,11 +30,13 @@ export function apply(changes, strings, categories={}, zeroCharacters='∅-') {
             console.log(`Failed to apply change "${change}".`)
             continue
         }
-        const pattern = `(?<=${before})(${original})(?=${after})`
+        let pattern = before == "#" ? "^" : `(?<=${before})`
+        pattern += `(${original})`
+        pattern += after == "#" ? "$" : `(?=${after})`
 
-        strings = strings.map(string => {
-            return `#${string}#`.replace(new RegExp(pattern, 'g'), changeTo).replace(/#/g, '').trim()
-        })
+        strings = strings.map(
+            string => string.replace(new RegExp(pattern, 'g'), changeTo)
+        )
     }
     return strings
 }
@@ -47,23 +46,18 @@ function displayResult(result) {
     resultElement.innerText = result.join('\n')
 }
 
-export function reformatChangeToRegex(change, categories = {}, zeroCharacters = '∅-') {
-    const regexEscape = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+export function reformatChangeToRegex(change, categories = {}, zeroCharacters = ["∅", "-"]) {
     const replacements = { ' ': '', '{': '(', '}': ')', ',': '|' }
 
     for (const [key, value] of Object.entries(replacements)) {
-        change = change.replace(new RegExp(regexEscape(key), 'g'), value)
+        change = change.replace(key, value)
     }
 
     for (const [category, categoryValues] of Object.entries(categories)) {
-        const categoryPattern = new RegExp(regexEscape(category), 'g')
-        change = change.replace(categoryPattern, `(${categoryValues.join('|')})`)
-        change = change.replace(new RegExp(`((?<=,)${regexEscape(category)})|(${regexEscape(category)}(?=,))`, 'g'), categoryValues.join('|'))
+        change = change.replace(category, `(${categoryValues.join('|')})`)
     }
 
-    for (const char of zeroCharacters) {
-        change = change.replace(new RegExp(regexEscape(char), 'g'), '')
-    }
+    change = change.replace(new RegExp(`(${zeroCharacters.join('|')})`, 'g'), '')
 
     return change
 }
