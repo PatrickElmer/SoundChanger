@@ -50,14 +50,14 @@ export function reformatChangeToRegex(change, categories = {}, zeroCharacters = 
     const replacements = { ' ': '', '{': '(', '}': ')', ',': '|' }
 
     for (const [key, value] of Object.entries(replacements)) {
-        change = change.replace(key, value)
+        change = change.replaceAll(key, value)
     }
 
     for (const [category, categoryValues] of Object.entries(categories)) {
-        change = change.replace(category, `(${categoryValues.join('|')})`)
+        change = change.replaceAll(category, `(${categoryValues.join('|')})`)
     }
 
-    change = change.replace(new RegExp(`(${zeroCharacters.join('|')})`, 'g'), '')
+    change = change.replaceAll(new RegExp(`(${zeroCharacters.join('|')})`, 'g'), '')
 
     return change
 }
